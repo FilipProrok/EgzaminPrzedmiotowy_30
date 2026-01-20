@@ -136,6 +136,19 @@
       <string>Zapisz</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushPokazHistorie">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>510</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Historia</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QTabWidget" name="tabBloki">
     <property name="geometry">

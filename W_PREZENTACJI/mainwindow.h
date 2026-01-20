@@ -15,6 +15,9 @@
 #include "W_USLUG\program.h"
 #include "W_DANYCH\pytanie.h"
 
+#include "W_PREZENTACJI/historiawindow.h"
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -43,6 +46,8 @@ private slots:
 
     void on_pushZapiszHistorie_clicked();
 
+    void on_pushPokazHistorie_clicked();
+
 private:
     static const int MAX_LICZ_BLOKOW = 2;
     static const int MIN_LICZ_PYT = 3;
@@ -58,6 +63,8 @@ private:
 
     Ui::MainWindow *ui;
     Program m_uslugi;
+
+    HistoriaWindow *m_historiaWindow = nullptr;
 
     std::array<QSpinBox*,MAX_LICZ_BLOKOW> m_pytLicz;
     std::array<QTextBrowser*,MAX_LICZ_BLOKOW> m_pytDispPelny;

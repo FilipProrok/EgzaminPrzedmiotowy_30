@@ -118,3 +118,15 @@ void Program::zapiszHistorieDoPliku(QString sciezka)
 {
     m_historia.zapiszDoPliku(sciezka);
 }
+
+QString Program::pobierzTrescPytania(int blok, int id)
+{
+    if (blok < 0 || blok >= m_BazaPytan->getNumBlok()) return "Błąd zakresu bloku";
+
+    const QVector<Pytanie>& pytania = m_BazaPytan->getBlok(blok);
+
+    if (id < 0 || id >= pytania.size()) return "Nieznane ID pytania";
+
+    Pytanie p = pytania.at(id);
+    return p.getCzystyNaglowek();
+}

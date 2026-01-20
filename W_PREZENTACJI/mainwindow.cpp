@@ -5,7 +5,8 @@
 #include <QStandardPaths>
 #include <QFileDialog>
 #include <QDateTime>
-#include <QCloseEvent> // <--- Dodano brakujący nagłówek dla definicji klasy QCloseEvent
+#include <QCloseEvent>
+#include <QMessageBox>
 
 // KONSTRUKTORY, SETUP I DESTRUKTOR:
 
@@ -362,3 +363,36 @@ void MainWindow::on_pushZapiszHistorie_clicked()
 
     m_uslugi.zapiszHistorieDoPliku(fileName);
 }
+
+void MainWindow::on_pushPokazHistorie_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Otwórz plik historii"),
+                                                    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation),
+                                                    tr("Pliki binarne (*.bin);;Wszystkie pliki (*)"));
+
+    if (fileName.isEmpty()) return;
+
+    // Zgodnie z wytycznymi: deserializujemy do instancji klasy Historia
+    // Tworzymy tymczasowy obiekt Historii na potrzeby wizualizacji
+    Historia *tempHistoria = new Historia(this);
+    if (!tempHistoria->wczytajZPliku(fileName)) {
+        QMessageBox::critical(this, tr("Błąd"), tr("Nie udało się wczytać pliku historii!"));
+        delete tempHistoria;
+        return;
+    }
+
+    // Tworzymy i wyświetlamy okno
+    // Przekazujemy wskaźnik do m_uslugi, aby okno mogło pobrać teksty pytań,
+    // jeśli aktualnie wczytany przedmiot zgadza się z tym w historii.
+    if (m_historiaWindow) delete m_historiaWindow; // Usuń poprzednie jeśli istnieje
+
+    // Przekazujemy *tempHistoria (dane) i &m_uslugi (logika do dociągania tekstów)
+    // UWAGA: tempHistoria musi przeżyć. Przekażemy ownership do HistoriaWindow lub skopiujemy dane.
+    // W HistoriaWindow w konstruktorze kopiujemy rejestr, więc tempHistoria można usunąć po stworzeniu okna.
+    m_historiaWindow = new HistoriaWindow(*tempHistoria, &m_uslugi, nullptr);
+    m_historiaWindow->show();
+
+    delete tempHistoria; // Dane zostały skopiowane w konstruktorze HistoriaWindow
+}
+

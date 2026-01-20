@@ -22,6 +22,7 @@ public:
     void odznaczPytania(QVector<int>,int);
     void ponownieWypiszWylosowane(int blok);
     void zapiszHistorieDoPliku(QString sciezka);
+    QString pobierzTrescPytania(int blok, int id);
 
 signals:
     void wypisz(QVector<Pytanie>&,int);

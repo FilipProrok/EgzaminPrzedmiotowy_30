@@ -13,6 +13,7 @@ SOURCES += \
     W_DANYCH/historia.cpp \
     W_DANYCH\importer.cpp \
     W_DANYCH\importerBlokowy.cpp \
+    W_PREZENTACJI/historiawindow.cpp \
     main.cpp \
     W_PREZENTACJI\mainwindow.cpp \
     W_USLUG\program.cpp \
@@ -24,12 +25,14 @@ HEADERS += \
     W_DANYCH/historia.h \
     W_DANYCH\importer.h \
     W_DANYCH\importerBlokowy.h \
+    W_PREZENTACJI/historiawindow.h \
     W_PREZENTACJI\mainwindow.h \
     W_USLUG\program.h \
     W_DANYCH\pytanie.h \
     W_DANYCH\urn.h
 
 FORMS += \
+    W_PREZENTACJI/historiawindow.ui \
     W_PREZENTACJI\mainwindow.ui
 
 # Default rules for deployment.

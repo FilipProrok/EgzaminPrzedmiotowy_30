@@ -75,3 +75,28 @@ bool Historia::zapiszDoPliku(QString sciezka)
     qInfo() << "Zapisano historię do pliku:" << sciezka;
     return true;
 }
+
+
+bool Historia::wczytajZPliku(QString sciezka)
+{
+    QFile plik(sciezka);
+    if (!plik.open(QIODevice::ReadOnly)) {
+        qWarning() << "Nie można otworzyć pliku do odczytu:" << sciezka;
+        return false;
+    }
+
+    QDataStream in(&plik);
+    quint32 magic;
+    in >> magic;
+
+    if (magic != 0xAABBCCDD) {
+        qWarning() << "Nieprawidłowy format pliku historii!";
+        return false;
+    }
+
+    m_rejestr.clear();
+    in >> m_rejestr;
+
+    plik.close();
+    return true;
+}

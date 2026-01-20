@@ -68,8 +68,11 @@ public:
     // Metoda pomocnicza do debugowania
     void wypiszHistorie();
 
-    // Nowa metoda do zapisu binarnego całej historii do pliku
     bool zapiszDoPliku(QString sciezka);
+
+    bool wczytajZPliku(QString sciezka);
+
+    const QVector<WpisHistorii>& getRejestr() const { return m_rejestr; }
 };
 
 #endif // HISTORIA_H
