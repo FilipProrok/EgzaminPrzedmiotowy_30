@@ -18,6 +18,7 @@ SOURCES += \
     W_USLUG\program.cpp \
     W_DANYCH\pytanie.cpp \
     W_DANYCH\urn.cpp
+    W_DANYCH\historia.cpp
 
 HEADERS += \
     W_DANYCH/historia.h \

@@ -51,7 +51,7 @@
      <string>Egzamin</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignmentFlag::AlignCenter</set>
+     <set>Qt::AlignCenter</set>
     </property>
     <widget class="QComboBox" name="przedmiot">
      <property name="geometry">
@@ -123,6 +123,19 @@
       <string>Rozbij pytania</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushZapiszHistorie">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>460</y>
+       <width>161</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Zapisz</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QTabWidget" name="tabBloki">
     <property name="geometry">
@@ -181,10 +194,10 @@
        </font>
       </property>
       <property name="layoutDirection">
-       <enum>Qt::LayoutDirection::LeftToRight</enum>
+       <enum>Qt::LeftToRight</enum>
       </property>
       <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
       <property name="minimum">
        <number>0</number>
@@ -305,10 +318,10 @@
        </font>
       </property>
       <property name="layoutDirection">
-       <enum>Qt::LayoutDirection::LeftToRight</enum>
+       <enum>Qt::LeftToRight</enum>
       </property>
       <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
       <property name="minimum">
        <number>0</number>

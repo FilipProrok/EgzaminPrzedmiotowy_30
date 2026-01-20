@@ -113,3 +113,8 @@ void Program::ponownieWypiszWylosowane(int blok)
     // zbędny. Chodzi o wyraźne zaznaczenie, że w razie niewłaściwej liczby pytań ta usługa ma
     // nie robić nic!
 }
+
+void Program::zapiszHistorieDoPliku(QString sciezka)
+{
+    m_historia.zapiszDoPliku(sciezka);
+}

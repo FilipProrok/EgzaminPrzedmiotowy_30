@@ -5,42 +5,71 @@
 #include <QVector>
 #include <QDateTime>
 #include <QDebug>
+#include <QDataStream>
+#include <QFile>
 
-// Struktura przechowująca minimalne dane potrzebne do namierzenia pytania w bazie
+// Struktura przechowująca minimalny ślad pytania (bez treści)
+// Zawiera operatory << i >> umożliwiające zapis binarny
 struct SladPytania {
-    int blok;       // Numer bloku (np. 0 dla A, 1 dla B)
-    int numerID;    // Unikalny numer pytania wewnątrz bloku (z pliku)
-    bool odrzucone; // Flaga: false = wylosowane, true = odrzucone przez użytkownika
+    int blok;       // Numer bloku (np. 0 lub 1)
+    int numerID;    // Indeks pytania w bazie
+    bool odrzucone; // Flaga stanu
 
+    SladPytania() = default; // Konstruktor domyślny wymagany przy deserializacji
     SladPytania(int b, int id) : blok(b), numerID(id), odrzucone(false) {}
+
+    // Operator zapisu do strumienia binarnego
+    friend QDataStream &operator<<(QDataStream &out, const SladPytania &slad) {
+        out << slad.blok << slad.numerID << slad.odrzucone;
+        return out;
+    }
+
+    // Operator odczytu ze strumienia binarnego
+    friend QDataStream &operator>>(QDataStream &in, SladPytania &slad) {
+        in >> slad.blok >> slad.numerID >> slad.odrzucone;
+        return in;
+    }
 };
 
-// Struktura reprezentująca pojedynczy rzut (losowanie) w ramach egzaminu
+// Struktura pojedynczego wpisu w historii (jeden rzut losowania)
 struct WpisHistorii {
     QDateTime czas;
     QString przedmiot;
     QVector<SladPytania> pytania;
+
+    // Operator zapisu
+    friend QDataStream &operator<<(QDataStream &out, const WpisHistorii &wpis) {
+        out << wpis.czas << wpis.przedmiot << wpis.pytania;
+        return out;
+    }
+
+    // Operator odczytu
+    friend QDataStream &operator>>(QDataStream &in, WpisHistorii &wpis) {
+        in >> wpis.czas >> wpis.przedmiot >> wpis.pytania;
+        return in;
+    }
 };
 
 class Historia : public QObject
 {
     Q_OBJECT
 private:
-    // Lista wszystkich operacji losowania od uruchomienia programu
     QVector<WpisHistorii> m_rejestr;
 
 public:
     explicit Historia(QObject *parent = nullptr);
 
-    // Rejestruje nowe wylosowane pytania
+    // Rejestruje partię wylosowanych pytań
     void dodajWpis(QString przedmiot, int blok, const QVector<int>& wylosowaneID);
 
-    // Oznacza konkretne pytania jako odrzucone w ostatnim wpisie
-    // (lub wyszukuje odpowiedni wpis, jeśli obsługa jest bardziej złożona)
+    // Oznacza konkretne pytanie jako odrzucone (szuka od końca historii)
     void oznaczJakoOdrzucone(QString przedmiot, int blok, int numerID);
 
-    // Metoda pomocnicza do podglądu historii (np. w konsoli debug)
+    // Metoda pomocnicza do debugowania
     void wypiszHistorie();
+
+    // Nowa metoda do zapisu binarnego całej historii do pliku
+    bool zapiszDoPliku(QString sciezka);
 };
 
 #endif // HISTORIA_H

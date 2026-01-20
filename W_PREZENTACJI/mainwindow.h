@@ -38,6 +38,8 @@ private slots:
     void on_pushWybBB_clicked();
     void wypisz(QVector<Pytanie>&,int);
 
+    void on_pushZapiszHistorie_clicked();
+
 private:
     static const int MAX_LICZ_BLOKOW = 2;
     static const int MIN_LICZ_PYT = 3;

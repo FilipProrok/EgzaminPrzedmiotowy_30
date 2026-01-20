@@ -2,9 +2,10 @@
 #define PROGRAM_H
 
 #include <QObject>
+#include <array>
 #include "W_DANYCH\urn.h"
 #include "W_DANYCH\importer.h"
-#include "W_DANYCH/historia.h"
+#include "W_DANYCH\historia.h"
 
 
 class Program : public QObject
@@ -20,6 +21,7 @@ public:
     QStringList getListaPrzedmiotow();
     void odznaczPytania(QVector<int>,int);
     void ponownieWypiszWylosowane(int blok);
+    void zapiszHistorieDoPliku(QString sciezka);
 
 signals:
     void wypisz(QVector<Pytanie>&,int);
@@ -32,7 +34,6 @@ private:
     std::array<QVector<Pytanie>,MAX_LICZ_BLOKOW> m_WylosPyt;
 
     Historia m_historia;
-
 };
 
 #endif // PROGRAM_H

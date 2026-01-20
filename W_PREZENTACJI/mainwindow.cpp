@@ -2,6 +2,8 @@
 #include "ui_mainwindow.h"
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include <QStandardPaths>
+#include <QFileDialog>
 
 // KONSTRUKTORY, SETUP I DESTRUKTOR:
 
@@ -315,3 +317,23 @@ void MainWindow::on_checkDekomponuj_stateChanged(int state)
     Q_UNUSED(state);
     m_uslugi.ponownieWypiszWylosowane(ui->tabBloki->currentIndex());
 }
+
+void MainWindow::on_pushZapiszHistorie_clicked()
+{
+    // Pobieramy ścieżkę do systemowego folderu Dokumenty
+    QString documentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
+    // Sugerujemy nazwę pliku z datą
+    QString defaultName = documentsPath + "/HistoriaEgzaminow_" + QDateTime::currentDateTime().toString("yyyy-MM-dd") + ".bin";
+
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Zapisz historię"),
+                                                    defaultName, // Tutaj wstawiamy naszą domyślną ścieżkę
+                                                    tr("Pliki binarne (*.bin);;Wszystkie pliki (*)"));
+
+    if (fileName.isEmpty())
+        return;
+
+    m_uslugi.zapiszHistorieDoPliku(fileName);
+}
+
