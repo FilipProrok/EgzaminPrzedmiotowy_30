@@ -27,6 +27,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 private slots:
     void on_pushGenBA_clicked();
     void on_pushGenBB_clicked();

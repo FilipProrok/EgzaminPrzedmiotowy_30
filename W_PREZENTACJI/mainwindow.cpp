@@ -4,10 +4,12 @@
 #include <QHBoxLayout>
 #include <QStandardPaths>
 #include <QFileDialog>
+#include <QDateTime>
+#include <QCloseEvent> // <--- Dodano brakujący nagłówek dla definicji klasy QCloseEvent
 
 // KONSTRUKTORY, SETUP I DESTRUKTOR:
 
-                                   MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -24,8 +26,13 @@
 
     // Ustawienie comboboxa z nazwami przedmiotów:
     ui->przedmiot->clear();
-    ui->przedmiot->addItems(m_uslugi.getListaPrzedmiotow());
-    ui->przedmiot->setCurrentIndex(1); // Domyślnie PPK
+    QStringList lista = m_uslugi.getListaPrzedmiotow();
+    if (!lista.isEmpty()) {
+        ui->przedmiot->addItems(lista);
+        // Jeśli jest więcej niż 1 przedmiot, ustawiamy na drugi (zgodnie z oryginałem),
+        // jeśli nie, to na pierwszy (index 0).
+        ui->przedmiot->setCurrentIndex(lista.size() > 1 ? 1 : 0);
+    }
 
     // Moja inicjalizacja stanu początkowego kontrolek w GUI:
     ustawGUI();
@@ -38,6 +45,27 @@
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+// Metoda obsługująca zamknięcie okna (Automatyczny zapis)
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    // Pobieramy ścieżkę do Dokumentów
+    QString documentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
+    // Generujemy nazwę pliku: RaportEgzaminu_YYYY-MM-DD_HH-mm-ss.bin
+    // Zamieniamy dwukropki na myślniki, bo dwukropki są niedozwolone w nazwach plików w Windows
+    QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd_HH-mm-ss");
+    QString autoFileName = documentsPath + "/RaportEgzaminu_" + timestamp + ".bin";
+
+    // Wywołujemy zapis BEZPOŚREDNIO, bo metoda w Program zwraca void
+    // (Informacja o sukcesie/błędzie zostanie wypisana w konsoli przez klasę Historia/Program)
+    m_uslugi.zapiszHistorieDoPliku(autoFileName);
+
+    qInfo() << "AUTO-ZAPIS: Próba zapisu raportu do:" << autoFileName;
+
+    // Akceptujemy zdarzenie zamknięcia (okno się zamknie)
+    event->accept();
 }
 
 void MainWindow::ustawGUI()
@@ -318,17 +346,15 @@ void MainWindow::on_checkDekomponuj_stateChanged(int state)
     m_uslugi.ponownieWypiszWylosowane(ui->tabBloki->currentIndex());
 }
 
+// Slot do ręcznego zapisu (z przycisku)
 void MainWindow::on_pushZapiszHistorie_clicked()
 {
-    // Pobieramy ścieżkę do systemowego folderu Dokumenty
     QString documentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-
-    // Sugerujemy nazwę pliku z datą
     QString defaultName = documentsPath + "/HistoriaEgzaminow_" + QDateTime::currentDateTime().toString("yyyy-MM-dd") + ".bin";
 
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     tr("Zapisz historię"),
-                                                    defaultName, // Tutaj wstawiamy naszą domyślną ścieżkę
+                                                    defaultName,
                                                     tr("Pliki binarne (*.bin);;Wszystkie pliki (*)"));
 
     if (fileName.isEmpty())
@@ -336,4 +362,3 @@ void MainWindow::on_pushZapiszHistorie_clicked()
 
     m_uslugi.zapiszHistorieDoPliku(fileName);
 }
-
