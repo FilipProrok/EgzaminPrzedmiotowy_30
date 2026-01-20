@@ -4,6 +4,7 @@
 #include <QObject>
 #include "W_DANYCH\urn.h"
 #include "W_DANYCH\importer.h"
+#include "W_DANYCH/historia.h"
 
 
 class Program : public QObject
@@ -29,6 +30,8 @@ private:
     Importer * m_BazaPytan;
     std::array<Urn,MAX_LICZ_BLOKOW> m_urnyDoLosowania;
     std::array<QVector<Pytanie>,MAX_LICZ_BLOKOW> m_WylosPyt;
+
+    Historia m_historia;
 
 };
 

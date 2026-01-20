@@ -53,6 +53,9 @@ void Program::losujPytania(int blok, int num)
     for(int pyt = 0; pyt < toLos; pyt++)
         m_WylosPyt[blok][pyt] = m_BazaPytan->getBlok(blok).at(numery[pyt]);
 
+    // historia
+    m_historia.dodajWpis(getAktPrzedmiot(), blok, numery);
+
     // Zlecenie wypisania pytań do warstwy prezentacji przy pomocy sygnału:
     emit wypisz(m_WylosPyt[blok], blok);
 
@@ -73,6 +76,19 @@ QStringList Program::getListaPrzedmiotow()
 // USŁUGA oczyszczania wektora wylosowanych pytań z wybranych do usunięcia:
 void Program::odznaczPytania(QVector<int> pytDoOdznaczenia, int blok)
 {
+
+    //historia
+    QString aktualnyPrzedmiot = getAktPrzedmiot();
+    for(int idx : pytDoOdznaczenia)
+    {
+        // Pobieramy ID pytania z obiektu Pytanie
+        int idWBazie = m_WylosPyt[blok][idx].getNumer();
+
+        // Zgłaszamy do historii
+        m_historia.oznaczJakoOdrzucone(aktualnyPrzedmiot, blok, idWBazie);
+    }
+
+
     // Najpierw sortowane są numery pytań do usuniecia aby uzyskać spójny i uprządkowany zbiór:
     std::sort(pytDoOdznaczenia.rbegin(), pytDoOdznaczenia.rend());
 
