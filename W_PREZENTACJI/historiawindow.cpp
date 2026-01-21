@@ -87,15 +87,9 @@ void HistoriaWindow::wypelnijDane()
             itemBlok->setTextAlignment(Qt::AlignCenter);
             m_tabela->setItem(row, 2, itemBlok);
 
-            // 4. Pytanie (Treść lub ID)
+            // 4. Pytanie (ID)
             QString tekstPytania;
-            if (trescDostepna) {
-                // Pobieramy treść z Programu
-                tekstPytania = m_programRef->pobierzTrescPytania(slad.blok, slad.numerID);
-            } else {
-                // Brak dostępu do bazy tego przedmiotu -> pokazujemy ID
-                tekstPytania = QString("ID: %1 (Brak treści - inny przedmiot)").arg(slad.numerID);
-            }
+            tekstPytania = QString("ID: %1").arg(slad.numerID);
             m_tabela->setItem(row, 3, new QTableWidgetItem(tekstPytania));
 
             // 5. Status (Kolorowanie)
